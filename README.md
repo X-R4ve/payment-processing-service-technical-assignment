@@ -35,6 +35,31 @@
 ```
 Обязательные поля: amount, currency, webhook_url.
 
+Тело ответа:
+```json
+{
+  "payment_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "pending",
+  "created_at": "2026-10-07T08:36:08.960Z"
+}
+```
+Пример запроса:
+```bash
+curl -X POST "http://localhost:8000/api/v1/payments" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: testapikey" \
+  -H "Idempotency-Key: 7f3b7c2e-6f5e-4e7a-9e6e-123456789abc" \
+  -d '{
+    "amount": 9.99,
+    "currency": "USD",
+    "description": "some description",
+    "metadata": {
+      "some_metadata_field": "some string"
+      },
+    "webhook_url": "https://example.com/webhook-endpoint" 
+  }'
+```
+
 **2.** `GET /api/v1/payments/{payment_id}` - запрос информации о платеже
 
 Обязательные заголовки:
@@ -55,6 +80,11 @@
   "created_at": "2026-10-07T08:36:08.960Z",
   "processed_at": "2026-10-07T08:36:08.960Z"
 }
+```
+Пример запроса:
+```bash
+curl -X GET "http://localhost:8000/api/v1/payments/3fa85f64-5717-4562-b3fc-2c963f66afa6" \
+  -H "X-API-Key: testapikey"
 ```
 
 ## Технологии
