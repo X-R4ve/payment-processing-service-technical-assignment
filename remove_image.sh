@@ -1,0 +1,1 @@
+docker rmi payment-processing-service:v1

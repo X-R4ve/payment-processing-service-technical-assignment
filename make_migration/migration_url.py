@@ -1,0 +1,1 @@
+db_migration_url = 'postgresql+asyncpg://user:password@localhost:15432/migr'

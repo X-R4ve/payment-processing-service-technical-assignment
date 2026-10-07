@@ -1,0 +1,1 @@
+docker build -t payment-processing-service:v1 .

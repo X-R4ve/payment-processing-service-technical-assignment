@@ -1,0 +1,79 @@
+services:
+    db:
+        image: postgres:18-alpine
+        container_name: postgresql
+        restart: unless-stopped
+        env_file:
+            - app_config/db.env
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+            interval: 5s
+            timeout: 3s
+            retries: 5
+            start_period: 10s
+
+    migration:
+        image: payment-processing-service:v1
+        container_name: db_migration
+        volumes:
+            - ./app_config/settings.yaml:/etc/payment_processing_service/settings.yaml
+        depends_on:
+            db:
+                condition: service_healthy
+        command: ["alembic", "upgrade", "head"]
+
+    app:
+        image: payment-processing-service:v1
+        container_name: payment_processing_service
+        volumes:
+            - ./app_config/settings.yaml:/etc/payment_processing_service/settings.yaml
+        depends_on:
+            db:
+                condition: service_healthy
+            migration:
+                condition: service_completed_successfully
+        ports:
+            - "8000:8000"
+
+    worker:
+        image: payment-processing-service:v1
+        container_name: worker
+        volumes:
+            - ./app_config/settings.yaml:/etc/payment_processing_service/settings.yaml
+        depends_on:
+            db:
+                condition: service_healthy
+            migration:
+                condition: service_completed_successfully
+            rabbitmq:
+                condition: service_healthy
+        command: ["faststream", "run", "app.infrastructure.messaging.worker:worker_app"]
+
+    consumer:
+        image: payment-processing-service:v1
+        container_name: consumer
+        volumes:
+            - ./app_config/settings.yaml:/etc/payment_processing_service/settings.yaml
+        depends_on:
+            db:
+                condition: service_healthy
+            migration:
+                condition: service_completed_successfully
+            rabbitmq:
+                condition: service_healthy
+        command: ["faststream", "run", "app.infrastructure.messaging.consumer:consumer_app"]
+
+    rabbitmq:
+        image: rabbitmq:4.2.4-management-alpine
+        container_name: rabbitmq
+        restart: unless-stopped
+        env_file:
+            - app_config/rabbitmq.env
+        ports:
+            - "15672:15672"
+        healthcheck:
+            test: [ "CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 15s

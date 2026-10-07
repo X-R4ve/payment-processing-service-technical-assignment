@@ -1,0 +1,9 @@
+.git
+.gitignore
+.venv
+.env
+.mypy_cache
+.idea
+
+__pycache__/
+*.py[oc]

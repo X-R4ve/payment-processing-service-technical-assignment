@@ -1,0 +1,13 @@
+db:
+    host: "db"
+    port: 5432
+    user: "postgres"
+    password: "very_difficult_password"
+    name: "database"
+rabbitmq:
+    host: "rabbitmq"
+    port: 5672
+    user: "app"
+    password: "123321"
+    vhost: "%2f"
+api_key: "testapikey"
