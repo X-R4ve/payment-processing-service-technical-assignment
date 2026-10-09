@@ -4,7 +4,6 @@ from logging import getLogger, basicConfig, INFO
 
 from faststream import FastStream
 from faststream.rabbit.publisher import RabbitPublisher
-from pamqp.commands import Basic
 
 from app.application.enums import EventTypeEnum
 from app.infrastructure.db.core.connection import DatabaseConnection

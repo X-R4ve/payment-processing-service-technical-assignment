@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from uuid import UUID
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 from app.application.enums import CurrencyEnum, EventTypeEnum, PaymentStatusEnum
 

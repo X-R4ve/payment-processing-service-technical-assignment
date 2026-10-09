@@ -1,6 +1,5 @@
 from collections.abc import AsyncGenerator
 from functools import lru_cache
-from os import getenv
 from typing import Annotated
 
 from fastapi import Request, Depends

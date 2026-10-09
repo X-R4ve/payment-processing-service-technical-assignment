@@ -11,6 +11,7 @@ dependencies = [
     "fastapi>=0.142.2",
     "faststream[cli,rabbit]>=0.7.7",
     "httpx>=0.28.1",
+    "mypy>=2.4.0",
     "pydantic-settings>=2.15.0",
     "pyyaml>=6.0.3",
     "sqlalchemy[asyncio]>=2.1.3",

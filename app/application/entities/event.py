@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID, uuid7 # type: ignore
 
-from app.application.enums import EventTypeEnum, CurrencyEnum
+from app.application.enums import EventTypeEnum
 
 
 class IEventPayload(ABC):
