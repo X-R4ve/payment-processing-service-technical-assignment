@@ -48,10 +48,11 @@ async def run_cycle(
             need_sleep = True
             logger.error(f'Some new events were not published: {errors_num}')
 
-        await mark_published(db_session=session,
-                             msg_ids=success_ids,
-                             dt=datetime.now(UTC))
-        await session.commit()
+        if success_ids:
+            await mark_published(db_session=session,
+                                 msg_ids=success_ids,
+                                 dt=datetime.now(UTC))
+            await session.commit()
 
     return need_sleep
 
