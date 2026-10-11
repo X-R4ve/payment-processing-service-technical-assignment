@@ -2,7 +2,7 @@ from collections.abc import AsyncGenerator
 from functools import lru_cache
 from typing import Annotated
 
-from fastapi import Request, Depends
+from fastapi import Request, Depends, status
 from fastapi.params import Security
 from fastapi.security import APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -76,9 +76,13 @@ async def validate_api_key(
         api_key_from_client: Annotated[str | None, Security(api_key_scheme)]
 ) -> str:
     if api_key_from_client is None:
-        raise BaseError(code=401, err='unauthorized', reason='API key required')
+        raise BaseError(code=status.HTTP_401_UNAUTHORIZED,
+                        err='unauthorized',
+                        reason='API key required')
 
     if api_key_from_client != api_key:
-        raise BaseError(code=401, err='unauthorized', reason='Invalid API key')
+        raise BaseError(code=status.HTTP_401_UNAUTHORIZED,
+                        err='unauthorized',
+                        reason='Invalid API key')
 
     return api_key_from_client
